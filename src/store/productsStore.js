@@ -5,6 +5,8 @@ import { colors } from '@mui/material'
 export const useProductsStore = create((set, get) => ({
 	products: [],
 	colors: [],
+	categories: [],
+	subCategories: [],
 
 	getProducts: async () => {
 		try {
@@ -30,6 +32,26 @@ export const useProductsStore = create((set, get) => ({
 			let { data } = await axiosStandart('Color/get-colors')
 			console.log(data.data)
 			set(() => ({ colors: data.data }))
+		} catch (error) {
+			console.log(error)
+		}
+	},
+
+	getCategories: async () => {
+		try {
+			let { data } = await axiosStandart('Category/get-categories')
+			console.log(data.data)
+			set(() => ({ categories: data.data }))
+		} catch (error) {
+			console.log(error)
+		}
+	},
+
+	getSubcategories: async () => {
+		try {
+			let { data } = await axiosStandart.get('SubCategory/get-sub-category')
+			console.log('SUB: ', data.data)
+			set(() => ({ subCategories: data.data }))
 		} catch (error) {
 			console.log(error)
 		}

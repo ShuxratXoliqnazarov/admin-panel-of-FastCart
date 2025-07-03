@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import { useProductsStore } from '../../store/productsStore'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './add.css'
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined'
 import Table from '@mui/material/Table'
@@ -18,17 +18,86 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { Upload } from '@mui/icons-material'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 
 export default function Add() {
-	const { getProducts, products, colors, getColors } = useProductsStore()
+	const {
+		getProducts,
+		products,
+		colors,
+		getColors,
+		getCategories,
+		categories,
+		getSubcategories,
+		subCategories,
+	} = useProductsStore()
+
+	const [productName, setProductName] = useState('')
+	const [code, setCode] = useState('')
+	const [description, setDescription] = useState('')
+	const [category, setCategory] = useState('')
+	const [subCategory, setSubCategory] = useState('')
+	const [brand, setBrand] = useState('')
+	const [price, setPrice] = useState('')
+	const [count, setCount] = useState('')
+
+	const [image, setImage] = useState([])
+
+	function handleFileChange(e) {
+		const files = Array.from(e.target.files)
+
+		Promise.all(
+			files.map(file => {
+				return new Promise((resolve, reject) => {
+					try {
+						const reader = new FileReader()
+
+						reader.onload = () => {
+							resolve({
+								name: file.name,
+								base64: reader.result,
+							})
+						}
+
+						reader.onerror = () => {
+							reject(new Error('Ошибка при чтении файла'))
+						}
+
+						reader.readAsDataURL(file)
+					} catch (error) {
+						reject(error)
+					}
+				})
+			})
+		)
+			.then(base64Images => {
+				setImage(prev => [...prev, ...base64Images])
+			})
+			.catch(error => {
+				console.error('Ошибка при обработке файлов:', error)
+			})
+	}
+
+	function handleDeleteImage(index) {
+		setImage(image.filter((el, i) => i != index))
+	}
 
 	useEffect(() => {
 		getProducts()
 		getColors()
+		getCategories()
+		getSubcategories()
 	}, [])
+
 	return (
 		<>
-			<div style={{ display: 'flex', justifyContent: 'space-between' , marginBottom: '40px' }}>
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					marginBottom: '40px',
+				}}
+			>
 				<div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
 					<Button color='white'>
 						<Link to={'/products'}>
@@ -61,8 +130,16 @@ export default function Add() {
 								label='Product name'
 								variant='outlined'
 								sx={{ width: '65%' }}
+								value={productName}
+								onChange={e => setProductName(e.target.value)}
 							/>
-							<TextField id='outlined-basic' label='Code' variant='outlined' />
+							<TextField
+								id='outlined-basic'
+								label='Code'
+								variant='outlined'
+								value={code}
+								onChange={e => setCode(e.target.value)}
+							/>
 						</div>
 						<TextareaAutosize
 							aria-label='minimum height'
@@ -77,6 +154,8 @@ export default function Add() {
 								maxHeight: '250px',
 								fontSize: '18px',
 							}}
+							value={description}
+							onChange={e => setDescription(e.target.value)}
 						/>
 						<div className='selects'>
 							<Box sx={{ minWidth: 120, width: '250px' }}>
@@ -87,31 +166,35 @@ export default function Add() {
 									<Select
 										labelId='demo-simple-select-label'
 										id='demo-simple-select'
-										// value={age}
+										value={category}
 										label='Categories'
-										// onChange={handleChange}
+										onChange={e => setCategory(e.target.value)}
 									>
-										<MenuItem value={10}>Ten</MenuItem>
-										<MenuItem value={20}>Twenty</MenuItem>
-										<MenuItem value={30}>Thirty</MenuItem>
+										{categories?.map(category => (
+											<MenuItem key={category.id} value={category.categoryName}>
+												{category.categoryName}
+											</MenuItem>
+										))}
 									</Select>
 								</FormControl>
 							</Box>
 							<Box sx={{ minWidth: 120, width: '250px' }}>
 								<FormControl fullWidth>
 									<InputLabel id='demo-simple-select-label'>
-										Subcatofories
+										Subcategories
 									</InputLabel>
 									<Select
 										labelId='demo-simple-select-label'
 										id='demo-simple-select'
-										// value={age}
-										label='Subcatofories '
-										// onChange={handleChange}
+										value={subCategory}
+										label='Subcategories'
+										onChange={e => setSubCategory(e.target.value)}
 									>
-										<MenuItem value={10}>Ten</MenuItem>
-										<MenuItem value={20}>Twenty</MenuItem>
-										<MenuItem value={30}>Thirty</MenuItem>
+										{subCategories?.map(sub => (
+											<MenuItem key={sub.id} value={sub.subCategoryName}>
+												{sub.subCategoryName}
+											</MenuItem>
+										))}
 									</Select>
 								</FormControl>
 							</Box>
@@ -121,9 +204,9 @@ export default function Add() {
 									<Select
 										labelId='demo-simple-select-label'
 										id='demo-simple-select'
-										// value={age}
-										label='Brands'
-										// onChange={handleChange}
+										value={brand}
+										label='Subcatofories '
+										onChange={e => setBrand(e.target.value)}
 									>
 										<MenuItem value={10}>Ten</MenuItem>
 										<MenuItem value={20}>Twenty</MenuItem>
@@ -157,6 +240,7 @@ export default function Add() {
 
 				<aside className='rightSec'>
 					<div
+						className='colors'
 						style={{
 							border: '1px solid gray',
 							padding: '20px',
@@ -170,8 +254,8 @@ export default function Add() {
 									key={color.id}
 									style={{
 										backgroundColor: color.colorName,
-										width: '70px',
-										height: '70px',
+										width: '50px',
+										height: '50px',
 										borderRadius: '50%',
 										border: '1px solid gray',
 									}}
@@ -180,11 +264,13 @@ export default function Add() {
 						</div>
 					</div>
 
-					<div style={{
-						display:'flex',
-						flexDirection:'column',
-						gap:'20px'
-					}}>
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: '20px',
+						}}
+					>
 						<h2>Images</h2>
 						<div>
 							<Paper
@@ -205,7 +291,8 @@ export default function Add() {
 									accept='image/*'
 									multiple
 									hidden
-									// onChange={e => setFiles(e.target.files)}
+									// value={image}
+									onChange={handleFileChange}
 								/>
 								<Upload size={20} style={{ marginBottom: 4, margin: 'auto' }} />
 								<Typography variant='body2'>
@@ -215,15 +302,9 @@ export default function Add() {
 									(SVG, JPG, PNG, or GIF maximum 900×400)
 								</Typography>
 							</Paper>
-
-							{/* <Button>
-								<DownloadOutlinedIcon />
-							</Button>
-							<p>Click to upload or drag and drop</p>
-							<p>(SVG, JPG, PNG, or gif maximum 900x400)</p> */}
 						</div>
-						{/* <TableContainer component={Paper}>
-							<Table sx={{ minWidth: 650 }} aria-label='simple table'>
+						<TableContainer component={Paper}>
+							<Table sx={{ minWidth: 130 }} aria-label='simple table'>
 								<TableHead>
 									<TableRow>
 										<TableCell>Image</TableCell>
@@ -232,23 +313,32 @@ export default function Add() {
 									</TableRow>
 								</TableHead>
 								<TableBody>
-									{rows.map(row => (
+									{image.map((elem, i) => (
 										<TableRow
-											key={row.name}
+											key={elem.name}
 											sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 										>
 											<TableCell component='th' scope='row'>
-												{row.name}
+												<img src={elem.base64} alt='' />
 											</TableCell>
-											<TableCell align='right'>{row.calories}</TableCell>
-											<TableCell align='right'>{row.fat}</TableCell>
-											<TableCell align='right'>{row.carbs}</TableCell>
-											<TableCell align='right'>{row.protein}</TableCell>
+											<TableCell align='right'>{elem.name}</TableCell>
+											<TableCell align='right'>
+												<div>
+													<Button
+														color='error'
+														onClick={() => {
+															handleDeleteImage(i)
+														}}
+													>
+														<DeleteOutlineIcon />
+													</Button>
+												</div>
+											</TableCell>
 										</TableRow>
 									))}
 								</TableBody>
 							</Table>
-						</TableContainer> */}
+						</TableContainer>
 					</div>
 				</aside>
 			</section>
