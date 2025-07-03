@@ -1,0 +1,31 @@
+.sec_1 {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+}
+.color {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 10px;
+
+	gap: 5px;
+}
+
+.leftSec {
+	width: 128%;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.rightSec {
+	width: 60%;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+}
+
+.selects {
+	display: flex;
+	justify-content: space-between;
+}

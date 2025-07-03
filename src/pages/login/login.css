@@ -1,0 +1,30 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.loginDarkSide {
+	background-color: #1c2536;
+	color: white;
+	width: 45%;
+	height: 100vh;
+}
+
+.loginSec {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.loginSide {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 65%;
+	height: 100vh;
+	gap: 30px;
+}
+
+.logo{
+	width: 200px;
+	height: 110px;
+}
