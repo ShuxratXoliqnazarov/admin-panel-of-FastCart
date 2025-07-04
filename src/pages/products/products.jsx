@@ -34,7 +34,12 @@ const Products = () => {
 			<div>
 				<Link
 					to={'/addProduct'}
-					style={{ display: 'flex', justifyContent: 'end' , marginTop:'-60px', textDecoration:'none' }}
+					style={{
+						display: 'flex',
+						justifyContent: 'end',
+						marginTop: '-60px',
+						textDecoration: 'none',
+					}}
 				>
 					<Button variant='contained'>+ Add Product</Button>
 				</Link>
@@ -114,7 +119,9 @@ const Products = () => {
 										}}
 									>
 										<Button color='primary'>
-											<BorderColorOutlinedIcon />
+											<Link to={`/edit/${product.id}`}>
+												<BorderColorOutlinedIcon />
+											</Link>
 										</Button>
 										<Button
 											color='error'

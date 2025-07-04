@@ -8,6 +8,7 @@ import Login from './pages/login/login'
 import Add from './pages/add/add'
 import Category from './pages/category/category'
 import Brands from './pages/brands/brands'
+import Edit from './pages/edit/edit'
 
 function App() {
 	const router = createBrowserRouter([
@@ -43,6 +44,10 @@ function App() {
 				{
 					path: '/brands',
 					element: <Brands />,
+				},
+				{
+					path: '/edit/:id',
+					element: <Edit />,
 				},
 			],
 		},
