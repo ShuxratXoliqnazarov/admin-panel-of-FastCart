@@ -1,6 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Button, TextareaAutosize, TextField, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Form, Link } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -30,56 +30,90 @@ export default function Add() {
 		categories,
 		getSubcategories,
 		subCategories,
+		getBrands,
+		brands,
+		postProduct,
 	} = useProductsStore()
 
 	const [productName, setProductName] = useState('')
-	const [code, setCode] = useState('')
+	const [code, setCode] = useState(null)
 	const [description, setDescription] = useState('')
-	const [category, setCategory] = useState('')
-	const [subCategory, setSubCategory] = useState('')
-	const [brand, setBrand] = useState('')
-	const [price, setPrice] = useState('')
-	const [count, setCount] = useState('')
+	const [category, setCategory] = useState(null)
+	const [subCategory, setSubCategory] = useState(null)
+	const [brand, setBrand] = useState(null)
+	const [price, setPrice] = useState(null)
+	const [count, setCount] = useState(null)
+	const [color, setColor] = useState(null)
 
-	const [image, setImage] = useState([])
+	const [image, setImage] = useState('')
 
-	function handleFileChange(e) {
-		const files = Array.from(e.target.files)
+	// function handleFileChange(e) {
+	// 	const files = Array.from(e.target.files)
 
-		Promise.all(
-			files.map(file => {
-				return new Promise((resolve, reject) => {
-					try {
-						const reader = new FileReader()
+	// 	Promise.all(
+	// 		files.map(file => {
+	// 			return new Promise((resolve, reject) => {
+	// 				try {
+	// 					const reader = new FileReader()
 
-						reader.onload = () => {
-							resolve({
-								name: file.name,
-								base64: reader.result,
-							})
-						}
+	// 					reader.onload = () => {
+	// 						resolve({
+	// 							name: file.name,
+	// 							base64: reader.result,
+	// 						})
+	// 					}
 
-						reader.onerror = () => {
-							reject(new Error('Ошибка при чтении файла'))
-						}
+	// 					reader.onerror = () => {
+	// 						reject(new Error('Ошибка при чтении файла'))
+	// 					}
 
-						reader.readAsDataURL(file)
-					} catch (error) {
-						reject(error)
-					}
-				})
-			})
-		)
-			.then(base64Images => {
-				setImage(prev => [...prev, ...base64Images])
-			})
-			.catch(error => {
-				console.error('Ошибка при обработке файлов:', error)
-			})
-	}
+	// 					reader.readAsDataURL(file)
+	// 				} catch (error) {
+	// 					reject(error)
+	// 				}
+	// 			})
+	// 		})
+	// 	)
+	// 		.then(base64Images => {
+	// 			setImage(prev => [...prev, ...base64Images])
+	// 		})
+	// 		.catch(error => {
+	// 			console.error('Ошибка при обработке файлов:', error)
+	// 		})
+	// }
 
 	function handleDeleteImage(index) {
 		setImage(image.filter((el, i) => i != index))
+	}
+
+	function handleAdd() {
+		const formData = new FormData()
+
+		formData.append('BrandId', brand)
+		formData.append('HasDiscount', false)
+		formData.append('Price', price)
+		formData.append('Quantity', count)
+		formData.append('Code', code)
+		formData.append('SubCategoryId', subCategory)
+		formData.append('ProductName', productName)
+		formData.append('Description', description)
+		formData.append('ColorId', color)
+		for (let i=0; i<image.length; i++) {
+			formData.append('Images', image[i])
+		}
+
+		postProduct(formData)
+
+		setProductName('')
+		setCode(null)
+		setDescription('')
+		setCategory(null)
+		setSubCategory(null)
+		setBrand(null)
+		setPrice(null)
+		setCount(null)
+		setColor(null)
+		// setImage([])
 	}
 
 	useEffect(() => {
@@ -87,6 +121,7 @@ export default function Add() {
 		getColors()
 		getCategories()
 		getSubcategories()
+		getBrands()
 	}, [])
 
 	return (
@@ -108,7 +143,9 @@ export default function Add() {
 				</div>
 				<div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
 					<Button variant='outlined'>Cancel</Button>
-					<Button variant='contained'>Save</Button>
+					<Button variant='contained' onClick={handleAdd}>
+						Save
+					</Button>
 				</div>
 			</div>
 
@@ -191,7 +228,7 @@ export default function Add() {
 										onChange={e => setSubCategory(e.target.value)}
 									>
 										{subCategories?.map(sub => (
-											<MenuItem key={sub.id} value={sub.subCategoryName}>
+											<MenuItem key={sub.id} value={sub.id}>
 												{sub.subCategoryName}
 											</MenuItem>
 										))}
@@ -208,9 +245,11 @@ export default function Add() {
 										label='Subcatofories '
 										onChange={e => setBrand(e.target.value)}
 									>
-										<MenuItem value={10}>Ten</MenuItem>
-										<MenuItem value={20}>Twenty</MenuItem>
-										<MenuItem value={30}>Thirty</MenuItem>
+										{brands?.map(brand => (
+											<MenuItem key={brand.id} value={brand.id}>
+												{brand.brandName}
+											</MenuItem>
+										))}
 									</Select>
 								</FormControl>
 							</Box>
@@ -221,6 +260,8 @@ export default function Add() {
 								label='Product price'
 								variant='outlined'
 								type='number'
+								value={price}
+								onChange={e => setPrice(e.target.value)}
 							/>
 							<TextField
 								id='outlined-basic'
@@ -233,6 +274,8 @@ export default function Add() {
 								label='Count'
 								variant='outlined'
 								type='number'
+								value={count}
+								onChange={e => setCount(e.target.value)}
 							/>
 						</div>
 					</div>
@@ -251,6 +294,7 @@ export default function Add() {
 						<div className='color'>
 							{colors?.map(color => (
 								<div
+									onClick={() => setColor(color.id)}
 									key={color.id}
 									style={{
 										backgroundColor: color.colorName,
@@ -292,7 +336,7 @@ export default function Add() {
 									multiple
 									hidden
 									// value={image}
-									onChange={handleFileChange}
+									onChange={e => setImage(e.target.files)}
 								/>
 								<Upload size={20} style={{ marginBottom: 4, margin: 'auto' }} />
 								<Typography variant='body2'>
@@ -303,7 +347,7 @@ export default function Add() {
 								</Typography>
 							</Paper>
 						</div>
-						<TableContainer component={Paper}>
+						{/* <TableContainer component={Paper}>
 							<Table sx={{ minWidth: 130 }} aria-label='simple table'>
 								<TableHead>
 									<TableRow>
@@ -338,7 +382,7 @@ export default function Add() {
 									))}
 								</TableBody>
 							</Table>
-						</TableContainer>
+						</TableContainer> */}
 					</div>
 				</aside>
 			</section>

@@ -7,6 +7,7 @@ export const useProductsStore = create((set, get) => ({
 	colors: [],
 	categories: [],
 	subCategories: [],
+	brands: [],
 
 	getProducts: async () => {
 		try {
@@ -30,7 +31,7 @@ export const useProductsStore = create((set, get) => ({
 	getColors: async () => {
 		try {
 			let { data } = await axiosStandart('Color/get-colors')
-			console.log(data.data)
+			// console.log(data.data)
 			set(() => ({ colors: data.data }))
 		} catch (error) {
 			console.log(error)
@@ -40,7 +41,7 @@ export const useProductsStore = create((set, get) => ({
 	getCategories: async () => {
 		try {
 			let { data } = await axiosStandart('Category/get-categories')
-			console.log(data.data)
+			// console.log(data.data)
 			set(() => ({ categories: data.data }))
 		} catch (error) {
 			console.log(error)
@@ -50,8 +51,27 @@ export const useProductsStore = create((set, get) => ({
 	getSubcategories: async () => {
 		try {
 			let { data } = await axiosStandart.get('SubCategory/get-sub-category')
-			console.log('SUB: ', data.data)
+			// console.log('SUB: ', data.data)
 			set(() => ({ subCategories: data.data }))
+		} catch (error) {
+			console.log(error)
+		}
+	},
+
+	getBrands: async () => {
+		try {
+			let { data } = await axiosStandart.get('Brand/get-brands')
+			console.log('BRANDS: ', data.data)
+			set(() => ({ brands: data.data }))
+		} catch (error) {
+			console.log(error)
+		}
+	},
+
+	postProduct: async formData => {
+		try {
+			await axiosRequest.post('Product/add-product', formData)
+			get().getProducts()
 		} catch (error) {
 			console.log(error)
 		}

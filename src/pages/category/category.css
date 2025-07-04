@@ -1,0 +1,23 @@
+.category {
+	display: flex;
+	align-items: start;
+	border: 1px solid gray;
+	width: 200px;
+	padding: 30px 20px;
+	justify-content: space-between;
+	border-radius: 10px;
+	transition-property: all;
+	transition-duration: 0.3s;
+}
+
+.category:hover {
+	box-shadow: 0px 0px 5px gray;
+	transform: scale(1.02);
+}
+
+.catSec {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+	justify-content: space-between;
+}

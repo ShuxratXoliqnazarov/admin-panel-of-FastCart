@@ -1,11 +1,8 @@
 import { Button } from '@mui/material'
+import './brands.css'
 import { Link } from 'react-router-dom'
-import Category from '../category/category'
-import { categoryStore } from '../../store/categoryStore'
 
-const Other = () => {
-	const { addModal, setAddModal } = categoryStore()
-
+export default function Brands() {
 	return (
 		<>
 			<div
@@ -16,12 +13,12 @@ const Other = () => {
 				}}
 			>
 				<div style={{ display: 'flex', gap: '10px' }}>
-					<Button variant='contained' color='inherit'>
+					<Button variant='outlined'>
 						<Link style={{ textDecoration: 'none' }} to={'/other'}>
 							Categories
 						</Link>
 					</Button>
-					<Button variant='outlined'>
+					<Button variant='contained' color='inherit'>
 						<Link style={{ textDecoration: 'none' }} to={'/brands'}>
 							Brands
 						</Link>
@@ -29,14 +26,9 @@ const Other = () => {
 				</div>
 
 				<div>
-					<Button variant='contained' onClick={() => setAddModal(true)}>
-						Add New
-					</Button>
+					<Button variant='contained'>Add New</Button>
 				</div>
 			</div>
-			<Category />
 		</>
 	)
 }
-
-export default Other
