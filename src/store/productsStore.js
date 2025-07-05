@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { axiosRequest, axiosStandart } from '../utils/axios'
 import { colors } from '@mui/material'
+import { toast } from 'sonner'
 
 export const useProductsStore = create((set, get) => ({
 	products: [],
@@ -23,8 +24,10 @@ export const useProductsStore = create((set, get) => ({
 		try {
 			await axiosRequest.delete(`Product/delete-product?id=${id}`)
 			get().getProducts()
+			toast.success('The product is deleted!')
 		} catch (error) {
 			console.log(error)
+			toast.error('There is something go wrong!')
 		}
 	},
 
@@ -71,6 +74,21 @@ export const useProductsStore = create((set, get) => ({
 	postProduct: async formData => {
 		try {
 			await axiosRequest.post('Product/add-product', formData)
+			get().getProducts()
+			toast.success('The product is succesfully added!')
+		} catch (error) {
+			console.log(error)
+			toast.error('There is go something wrong!')
+		}
+	},
+
+	searchProduct: async name => {
+		console.log(name)
+		try {
+			let { data } = await axiosStandart(
+				`Product/get-products?ProductName=${name}`
+			)
+			set(() => ({ products: data.data.products }))
 			get().getProducts()
 		} catch (error) {
 			console.log(error)

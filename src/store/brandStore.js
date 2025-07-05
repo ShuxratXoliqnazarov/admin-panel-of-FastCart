@@ -6,7 +6,10 @@ export const useBrandStore = create((set, get) => ({
 	getBrands: async () => {
 		try {
 			let { data } = await axiosStandart.get('Brand/get-brands')
-			console.log('BRANDS: ', data.data)
+			// console.log('BRANDS: ', data.d
+			// 
+			// 
+			// ata)
 			set(() => ({ brands: data.data }))
 		} catch (error) {
 			console.log(error)

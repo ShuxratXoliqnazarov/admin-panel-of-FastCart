@@ -14,16 +14,20 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useProductsStore } from '../../store/productsStore'
 import { API } from '../../utils/config'
 import './product.css'
 import { Link } from 'react-router-dom'
+import { Toaster } from 'sonner'
 
 const Products = () => {
-	const { getProducts, products, deleteProduct } = useProductsStore()
+	const { getProducts, products, deleteProduct, searchProduct } =
+		useProductsStore()
 
 	const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
+
+	const [search, setSearch] = useState('')
 
 	useEffect(() => {
 		getProducts()
@@ -50,23 +54,17 @@ const Products = () => {
 						margin: '40px 0px',
 					}}
 				>
-					<TextField id='outlined-basic' label='Search' variant='outlined' />
-					<Box sx={{ minWidth: 120 }}>
-						<FormControl fullWidth>
-							<InputLabel id='demo-simple-select-label'>Age</InputLabel>
-							<Select
-								labelId='demo-simple-select-label'
-								id='demo-simple-select'
-								// value={age}
-								label='Age'
-								// onChange={handleChange}
-							>
-								<MenuItem value={10}>Ten</MenuItem>
-								<MenuItem value={20}>Twenty</MenuItem>
-								<MenuItem value={30}>Thirty</MenuItem>
-							</Select>
-						</FormControl>
-					</Box>
+					<TextField
+						id='outlined-basic'
+						label='Search'
+						variant='outlined'
+						value={search}
+						onChange={e => {
+							searchProduct(e.target.value)
+							setSearch(e.target.value)
+						}}
+					/>
+					
 				</div>
 			</div>
 
@@ -136,6 +134,7 @@ const Products = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			<Toaster richColors position="bottom-right" />
 		</>
 	)
 }

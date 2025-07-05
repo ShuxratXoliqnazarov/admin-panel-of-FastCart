@@ -19,6 +19,7 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { Upload } from '@mui/icons-material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import { Toaster } from 'sonner'
 
 export default function Add() {
 	const {
@@ -357,6 +358,7 @@ export default function Add() {
 					</div>
 				</aside>
 			</section>
+			<Toaster richColors position="bottom-right" />
 		</>
 	)
 }

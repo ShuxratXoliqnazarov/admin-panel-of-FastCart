@@ -31,11 +31,10 @@ import Paper from '@mui/material/Paper'
 import { Upload } from '@mui/icons-material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 
-
 export default function Edit() {
 	const { product, getProductById, editProduct } = useEditStore()
 	const navigate = useNavigate()
-	
+
 	const {
 		// getProducts,
 		// products,
@@ -68,6 +67,7 @@ export default function Edit() {
 	const [category, setCategory] = useState(null)
 	const [subCategory, setSubCategory] = useState(null)
 	const [brand, setBrand] = useState(null)
+	// console.log( 'HHHHHHH: ' , brand)
 	const [price, setPrice] = useState(null)
 	const [count, setCount] = useState(null)
 	const [color, setColor] = useState(null)
@@ -89,8 +89,11 @@ export default function Edit() {
 			setCode(product.code)
 			setDescription(product.description)
 			setCategory(product.categoryId)
+			// const findCategory = categories.find((c) => e.id === product.id)
 			setSubCategory(product.subCategoryId)
-			setBrand(product.brandId)
+
+			const findBrand = brands.find(b => b.brandName === product.brand)
+			setBrand(findBrand?.id || null)
 			setPrice(product.price)
 			setCount(product.quantity)
 			setColor(product.colorId)
@@ -101,12 +104,12 @@ export default function Edit() {
 		// e.preventDefult()
 		const newEditProduct = {
 			Id: product.id,
-			BrandId: brand,
+			BrandId: Number(brand),
 			ColorId: color,
 			ProductName: productName,
 			Description: description,
 			Quantity: count,
-			Code: code,
+			Code: Date.now(),
 			Price: price,
 			HasDiscount: false,
 			SubCategoryId: subCategory,
@@ -131,7 +134,7 @@ export default function Edit() {
 							<ArrowBackIcon sx={{ fontSize: '35px' }} />
 						</Link>
 					</Button>
-					<h1> Add New</h1>
+					<h1> Edit Product </h1>
 				</div>
 				<div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
 					<Button variant='outlined'>Cancel</Button>
@@ -164,7 +167,7 @@ export default function Edit() {
 							/>
 							<TextField
 								id='outlined-basic'
-								label='Code'
+								// label='Code'
 								variant='outlined'
 								value={code}
 								onChange={e => setCode(e.target.value)}
@@ -190,33 +193,13 @@ export default function Edit() {
 							<Box sx={{ minWidth: 120, width: '250px' }}>
 								<FormControl fullWidth>
 									<InputLabel id='demo-simple-select-label'>
-										Categories
-									</InputLabel>
-									<Select
-										labelId='demo-simple-select-label'
-										id='demo-simple-select'
-										value={category}
-										label='Categories'
-										onChange={e => setCategory(e.target.value)}
-									>
-										{categories?.map(category => (
-											<MenuItem key={category.id} value={category.categoryName}>
-												{category.categoryName}
-											</MenuItem>
-										))}
-									</Select>
-								</FormControl>
-							</Box>
-							<Box sx={{ minWidth: 120, width: '250px' }}>
-								<FormControl fullWidth>
-									<InputLabel id='demo-simple-select-label'>
-										Subcategories
+										{/* Subcategories */}
 									</InputLabel>
 									<Select
 										labelId='demo-simple-select-label'
 										id='demo-simple-select'
 										value={subCategory}
-										label='Subcategories'
+										// label='/'
 										onChange={e => setSubCategory(e.target.value)}
 									>
 										{subCategories?.map(sub => (
@@ -229,14 +212,15 @@ export default function Edit() {
 							</Box>
 							<Box sx={{ minWidth: 120, width: '250px' }}>
 								<FormControl fullWidth>
-									<InputLabel id='demo-simple-select-label'>Brands</InputLabel>
+									<InputLabel id='demo-simple-select-label'></InputLabel>
 									<Select
 										labelId='demo-simple-select-label'
 										id='demo-simple-select'
 										value={brand}
-										label='Subcatofories '
+										// label='Subcatofories '
 										onChange={e => setBrand(e.target.value)}
 									>
+										{/* {console.log( 'AJARIII: ' , brand)} */}
 										{brands?.map(brand => (
 											<MenuItem key={brand.id} value={brand.id}>
 												{brand.brandName}

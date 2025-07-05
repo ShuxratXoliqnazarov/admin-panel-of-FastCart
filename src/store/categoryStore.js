@@ -13,7 +13,7 @@ export const categoryStore = create((set, get) => ({
 	getCategory: async () => {
 		try {
 			let { data } = await axiosStandart.get('Category/get-categories')
-			console.log('categories', data.data)
+			// console.log('categories', data.data)
 			set(() => ({ categories: data.data }))
 		} catch (error) {
 			console.log(error)
