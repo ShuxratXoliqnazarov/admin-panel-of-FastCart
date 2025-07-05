@@ -1,6 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Button, TextareaAutosize, TextField, Typography } from '@mui/material'
-import { Form, Link } from 'react-router-dom'
+import { Form, Link, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -47,44 +47,13 @@ export default function Add() {
 
 	const [image, setImage] = useState('')
 
-	// function handleFileChange(e) {
-	// 	const files = Array.from(e.target.files)
-
-	// 	Promise.all(
-	// 		files.map(file => {
-	// 			return new Promise((resolve, reject) => {
-	// 				try {
-	// 					const reader = new FileReader()
-
-	// 					reader.onload = () => {
-	// 						resolve({
-	// 							name: file.name,
-	// 							base64: reader.result,
-	// 						})
-	// 					}
-
-	// 					reader.onerror = () => {
-	// 						reject(new Error('Ошибка при чтении файла'))
-	// 					}
-
-	// 					reader.readAsDataURL(file)
-	// 				} catch (error) {
-	// 					reject(error)
-	// 				}
-	// 			})
-	// 		})
-	// 	)
-	// 		.then(base64Images => {
-	// 			setImage(prev => [...prev, ...base64Images])
-	// 		})
-	// 		.catch(error => {
-	// 			console.error('Ошибка при обработке файлов:', error)
-	// 		})
-	// }
+	
 
 	function handleDeleteImage(index) {
 		setImage(image.filter((el, i) => i != index))
 	}
+
+	const navigate = useNavigate()
 
 	function handleAdd() {
 		const formData = new FormData()
@@ -103,6 +72,8 @@ export default function Add() {
 		}
 
 		postProduct(formData)
+     navigate('/products')
+		
 
 		setProductName('')
 		setCode(null)

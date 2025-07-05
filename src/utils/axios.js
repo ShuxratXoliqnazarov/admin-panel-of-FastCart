@@ -12,4 +12,12 @@ const axiosRequest = axios.create({
 	},
 })
 
+// const axiosFormData = axios.create({
+// 	baseURL: API,
+// 	headers: {
+// 		"Authorization": `Bearer ${localStorage.getItem('token')}`,
+// 		"Content-Type": "multipart/form-data",
+// 	},
+// })
+
 export { axiosRequest, axiosStandart }

@@ -1,9 +1,12 @@
 import { create } from 'zustand'
-import { axiosRequest, axiosStandart } from '../utils/axios'
+import {axiosRequest, axiosStandart } from '../utils/axios'
 
 export const categoryStore = create((set, get) => ({
 	categories: [],
 	addModal: false,
+	editModal: false,
+
+	setEditModal: value => set(() => ({ editModal: value })),
 
 	setAddModal: value => set(() => ({ addModal: value })),
 
@@ -31,6 +34,16 @@ export const categoryStore = create((set, get) => ({
 		try {
 			await axiosRequest.delete(`Category/delete-category?id=${id}`)
 			get().getCategory()
+		} catch (error) {
+			console.log(error)
+		}
+	},
+
+	editCotegory: async formData => {
+		try {
+			await axiosRequest.put('Category/update-category', formData)
+			get().getCategory()
+			set(() => ({ editModal: false }))
 		} catch (error) {
 			console.log(error)
 		}

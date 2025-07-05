@@ -24,6 +24,9 @@ export default function Category() {
 		addModal,
 		addCategory,
 		delCategory,
+		editModal,
+		setEditModal,
+		editCotegory,
 	} = categoryStore()
 
 	const [image, setImage] = useState('')
@@ -46,6 +49,35 @@ export default function Category() {
 		setCategoryName('')
 	}
 
+	const [editName, setEditName] = useState('')
+	const [idx, setIdx] = useState(null)
+	const [editImage, setEditImage] = useState(null)
+
+	function handleEdit(el) {
+		setEditModal(true)
+		setIdx(el.id)
+		setEditName(el.categoryName)
+	}
+
+	function editFunc() {
+	const formData = new FormData()
+	formData.append('CategoryName', editName)
+	formData.append('id', idx)
+
+	if (editImage) {
+		for (let i = 0; i < editImage.length; i++) {
+			formData.append('CategoryImage', editImage[i])
+		}
+	}
+
+	editCotegory(formData)
+	setEditName('')
+	setIdx(null)
+	setImage('')
+	setEditModal(false)
+}
+
+
 	useEffect(() => {
 		getCategory()
 	}, [])
@@ -64,7 +96,7 @@ export default function Category() {
 						<div
 							style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}
 						>
-							<Button>
+							<Button onClick={() => handleEdit(el)}>
 								<BorderColorOutlinedIcon />
 							</Button>
 							<Button color='error' onClick={() => delCategory(el.id)}>
@@ -74,6 +106,9 @@ export default function Category() {
 					</article>
 				))}
 			</section>
+
+			{/* //! Add Modal */}
+
 			<Dialog onClose={handleClose} open={addModal}>
 				<DialogTitle>Add New Category</DialogTitle>
 				<Box
@@ -131,6 +166,71 @@ export default function Category() {
 							Cancel
 						</Button>
 						<Button color='' variant='contained' onClick={handleAdd}>
+							Save
+						</Button>
+					</div>
+				</Box>
+			</Dialog>
+
+			{/* //! Edit Modal */}
+			<Dialog onClose={handleClose} open={editModal}>
+				<DialogTitle>Edit Category</DialogTitle>
+				<Box
+					style={{
+						padding: 20,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 20,
+						alignItems: 'end',
+					}}
+				>
+					<TextField
+						id='outlined-basic'
+						label='Category name'
+						variant='outlined'
+						value={editName}
+						onChange={e => setEditName(e.target.value)}
+						sx={{ width: '100%' }}
+					/>
+					<Paper
+						variant='outlined'
+						sx={{
+							p: 2,
+							textAlign: 'center',
+							position: 'relative',
+							cursor: 'pointer',
+							border: '2px dashed #ccc',
+							'&:hover': { borderColor: '#999' },
+						}}
+						onClick={() => document.getElementById('file-upload')?.click()}
+					>
+						<input
+							id='file-upload'
+							type='file'
+							accept='image/*'
+							// multiple
+							hidden
+							// value={image}
+							onChange={e => setEditImage(e.target.files)}
+						/>
+						<Upload size={20} style={{ marginBottom: 4, margin: 'auto' }} />
+						<Typography variant='body2'>
+							Click to upload or drag and drop
+						</Typography>
+						<Typography variant='caption'>
+							(SVG, JPG, PNG, or GIF maximum 900×400)
+						</Typography>
+					</Paper>
+
+					<div style={{ display: 'flex', gap: '20px' }}>
+						<Button
+							color='error'
+							variant='text'
+							onClick={() => setEditModal(false)}
+						>
+							Cancel
+						</Button>
+						<Button color='' variant='contained' onClick={editFunc}>
 							Save
 						</Button>
 					</div>

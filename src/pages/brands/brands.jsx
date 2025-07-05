@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 
 export default function Brands() {
-	const { brands, getBrands, addBrand, delBrand } = useBrandStore()
+	const { brands, getBrands, addBrand, delBrand, editBrand } = useBrandStore()
 
 	const [addModal, setAddModal] = useState(false)
 	const [brandName, setBrandName] = useState('')
@@ -24,6 +24,28 @@ export default function Brands() {
 		addBrand(brand)
 		setBrandName('')
 		setAddModal(false)
+	}
+
+	const [editModal, setEditModal] = useState(false)
+	const [editName, setEditName] = useState('')
+	const [idx, setIdx] = useState(null)
+
+	function handleEdit(el) {
+		setEditModal(true)
+		setIdx(el.id)
+		setEditName(el.brandName)
+	}
+
+	function editFunc() {
+		let editUser = {
+			Id: idx,
+			BrandName: editName,
+		}
+
+		editBrand(editUser)
+		setEditModal(false)
+		setEditName('')
+		setIdx(null)
 	}
 
 	useEffect(() => {
@@ -64,7 +86,7 @@ export default function Brands() {
 					<article className='brand' key={el.id}>
 						<h1>{el.brandName}</h1>
 						<div>
-							<Button>
+							<Button onClick={() => handleEdit(el)}>
 								<BorderColorOutlinedIcon />
 							</Button>
 							<Button color='error' onClick={() => delBrand(el.id)}>
@@ -74,6 +96,8 @@ export default function Brands() {
 					</article>
 				))}
 			</section>
+
+			{/* //! add Modal  */}
 
 			<Dialog onClose={handleClose} open={addModal}>
 				<DialogTitle>Add New Category</DialogTitle>
@@ -104,6 +128,42 @@ export default function Brands() {
 							Cancel
 						</Button>
 						<Button color='' variant='contained' onClick={handleAdd}>
+							Save
+						</Button>
+					</div>
+				</Box>
+			</Dialog>
+
+			{/* //! eidt Modal  */}
+			<Dialog onClose={handleClose} open={editModal}>
+				<DialogTitle>Add New Category</DialogTitle>
+				<Box
+					style={{
+						padding: 20,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 20,
+						alignItems: 'end',
+					}}
+				>
+					<TextField
+						id='outlined-basic'
+						label='Category name'
+						variant='outlined'
+						value={editName}
+						onChange={e => setEditName(e.target.value)}
+						sx={{ width: '100%' }}
+					/>
+
+					<div style={{ display: 'flex', gap: '20px' }}>
+						<Button
+							color='error'
+							variant='text'
+							onClick={() => setEditModal(false)}
+						>
+							Cancel
+						</Button>
+						<Button color='' variant='contained' onClick={editFunc}>
 							Save
 						</Button>
 					</div>

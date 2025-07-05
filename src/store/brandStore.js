@@ -30,4 +30,15 @@ export const useBrandStore = create((set, get) => ({
 			console.log(error)
 		}
 	},
+
+	editBrand: async product => {
+		try {
+			await axiosRequest.put(
+				`Brand/update-brand?Id=${product.Id}&BrandName=${product.BrandName}`
+			)
+			get().getBrands()
+		} catch (error) {
+			console.log(error)
+		}
+	},
 }))
