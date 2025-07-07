@@ -2,6 +2,7 @@ import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
 import Category from '../category/category'
 import { categoryStore } from '../../store/categoryStore'
+import { Toaster } from 'sonner'
 
 const Other = () => {
 	const { addModal, setAddModal } = categoryStore()
@@ -26,6 +27,11 @@ const Other = () => {
 							Brands
 						</Link>
 					</Button>
+					<Button variant='outlined'>
+						<Link style={{ textDecoration: 'none' }} to={'/subCategories'}>
+							SubCategories
+						</Link>
+					</Button>
 				</div>
 
 				<div>
@@ -38,5 +44,6 @@ const Other = () => {
 		</>
 	)
 }
+<Toaster richColors position='bottom-right' />
 
 export default Other

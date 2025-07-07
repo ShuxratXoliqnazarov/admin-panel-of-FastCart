@@ -48,8 +48,6 @@ export default function Add() {
 
 	const [image, setImage] = useState('')
 
-	
-
 	function handleDeleteImage(index) {
 		setImage(image.filter((el, i) => i != index))
 	}
@@ -68,13 +66,12 @@ export default function Add() {
 		formData.append('ProductName', productName)
 		formData.append('Description', description)
 		formData.append('ColorId', color)
-		for (let i=0; i<image.length; i++) {
+		for (let i = 0; i < image.length; i++) {
 			formData.append('Images', image[i])
 		}
 
 		postProduct(formData)
-     navigate('/products')
-		
+		navigate('/products')
 
 		setProductName('')
 		setCode(null)
@@ -87,6 +84,8 @@ export default function Add() {
 		setColor(null)
 		// setImage([])
 	}
+
+	const [selectedColor, setSelectedColor] = useState(null)
 
 	useEffect(() => {
 		getProducts()
@@ -273,7 +272,13 @@ export default function Add() {
 										width: '50px',
 										height: '50px',
 										borderRadius: '50%',
-										border: '1px solid gray',
+										border:
+											selectedColor === color.id
+												? '3px solid yellow'
+												: '1px solid gray',
+										boxShadow: selectedColor === color.id ? '0 0 4px yellow' : '',
+										cursor: 'pointer',
+										transition: '0.2s',
 									}}
 								></div>
 							))}
@@ -358,7 +363,7 @@ export default function Add() {
 					</div>
 				</aside>
 			</section>
-			<Toaster richColors position="bottom-right" />
+			<Toaster richColors position='bottom-right' />
 		</>
 	)
 }

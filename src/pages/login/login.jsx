@@ -25,6 +25,7 @@ export default function Login() {
 			navigate('/')
 			setName('')
 			setPassword('')
+			window.location.reload()
 		} else {
 			console.log(result.error)
 		}

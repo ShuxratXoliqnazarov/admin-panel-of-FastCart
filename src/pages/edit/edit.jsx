@@ -30,6 +30,7 @@ import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import { Upload } from '@mui/icons-material'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import { Toaster } from 'sonner'
 
 export default function Edit() {
 	const { product, getProductById, editProduct } = useEditStore()
@@ -323,45 +324,10 @@ export default function Edit() {
 								</Typography>
 							</Paper>
 						</div>
-						{/* <TableContainer component={Paper}>
-							<Table sx={{ minWidth: 130 }} aria-label='simple table'>
-								<TableHead>
-									<TableRow>
-										<TableCell>Image</TableCell>
-										<TableCell align='right'>File name</TableCell>
-										<TableCell align='right'>Action</TableCell>
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{image.map((elem, i) => (
-										<TableRow
-											key={elem.name}
-											sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-										>
-											<TableCell component='th' scope='row'>
-												<img src={elem.base64} alt='' />
-											</TableCell>
-											<TableCell align='right'>{elem.name}</TableCell>
-											<TableCell align='right'>
-												<div>
-													<Button
-														color='error'
-														onClick={() => {
-															handleDeleteImage(i)
-														}}
-													>
-														<DeleteOutlineIcon />
-													</Button>
-												</div>
-											</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</TableContainer> */}
 					</div>
 				</aside>
 			</section>
+			<Toaster richColors position='bottom-right' />
 		</>
 	)
 }

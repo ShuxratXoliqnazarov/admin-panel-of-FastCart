@@ -9,6 +9,7 @@ import Add from './pages/add/add'
 import Category from './pages/category/category'
 import Brands from './pages/brands/brands'
 import Edit from './pages/edit/edit'
+import Sub from './pages/subCategories/subCategories'
 
 function App() {
 	const router = createBrowserRouter([
@@ -48,6 +49,10 @@ function App() {
 				{
 					path: '/edit/:id',
 					element: <Edit />,
+				},
+				{
+					path: '/subCategories',
+					element: <Sub />,
 				},
 			],
 		},
