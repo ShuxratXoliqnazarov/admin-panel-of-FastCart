@@ -1,8 +1,3 @@
-// const Dashboard = () => {
-//   return <div>Dashboard</div>;
-// };
-
-// export default Dashboard;
 
 import {
 	Box,
@@ -10,7 +5,6 @@ import {
 	CardContent,
 	Typography,
 	Grid,
-	Button,
 	Chip,
 	Table,
 	TableBody,
@@ -20,7 +14,7 @@ import {
 	TableRow,
 	Paper,
 } from '@mui/material'
-import { useState } from 'react'
+// import { useState } from 'react'
 import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 const salesData = [
