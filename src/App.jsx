@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Dashbord from './components/layouts/dashboard/dashboard'
-import Dashboard from '/src/pages/Dashboard/dashboard'
+// import Dashboard from '/src/pages/Dashboard/dashboard'
 import Orders from '/src/pages/Orders/orders'
 import Products from '/src/pages/Products/products'
 import Other from '/src/pages/Other/other'
@@ -10,6 +10,7 @@ import Category from './pages/category/category'
 import Brands from './pages/brands/brands'
 import Edit from './pages/edit/edit'
 import Sub from './pages/subCategories/subCategories'
+import Dashboard from './pages/dashboard/dashboard'
 
 function App() {
 	const router = createBrowserRouter([
